@@ -1,3 +1,6 @@
 cache_BS.pickle
 cache_SMA_dis.pickle
 cache_SMA.pickle
+sma.build/
+sma.dist/
+SMA-Calculator_Alpha.zip
