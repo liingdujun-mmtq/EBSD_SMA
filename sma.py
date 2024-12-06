@@ -225,7 +225,6 @@ def main_window():
 
     tk.Label(cal_frame,text="Config:",width=16).grid(row=1,column=0)
     config_BS_var=tk.BooleanVar()
-    #config_BS=tk.Checkbutton(cal_frame,text="BS Data",variable=config_BS_var,command=lambda: checkconfig(config_BS_var)).grid(row=1,column=1)
     config_BS=tk.Checkbutton(cal_frame,text="BS Data",variable=config_BS_var).grid(row=1,column=1)
 
     config_SMA_var=tk.BooleanVar()
@@ -295,12 +294,13 @@ def main_window():
             alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA=outputSMA(x,y,eulor_angle)
             MessageBox.insert(END, "%s SMA Data Finished! \n" %(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
             with open ("cache_SMA.pickle", "wb") as file:
-                pickle.dump((alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA,L,xlen,ylen), file)
+                pickle.dump((alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA,xlen,ylen), file)
             MessageBox.insert(END, "%s SMA Data Cached! \n" %(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())))
         #messagebox.showinfo(title="Info", message="Cal Finished!")
 
         SMA_distribution_config=config_SMA_dis_var.get()
         if SMA_distribution_config:
+            global SMA_dis100,SMA_dis110,SMA_dis111
             SMA_dis100=filterAng(alphaSMA100,3)
             SMA_dis110=filterAng(alphaSMA110,3)
             SMA_dis111=filterAng(alphaSMA111,3)
@@ -375,11 +375,11 @@ def main_window():
             count=len(SMA_dis100)
             F=5
             plt.hist(SMA_dis100,bins=range(3,45),weights=[1/L/10**F]*count,color="tab:red",alpha=0.8)
-            plt.xticks(range(0,46,5),fontsize=24)
-            plt.yticks(fontsize=24)
+            plt.xticks(range(0,46,5),fontsize=16)
+            plt.yticks(fontsize=16)
             plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%1.1f'))
-            plt.xlabel("100-SMA (°)",fontsize=28)
-            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=28)
+            plt.xlabel("100-SMA (°)",fontsize=20)
+            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
                 plt.savefig("img/100-SMA+dis.png",dpi=300)
@@ -390,11 +390,11 @@ def main_window():
             plt.figure(num="SMA-110 distribution",figsize=(6,6))
             count=len(SMA_dis110)
             plt.hist(SMA_dis110,bins=range(3,45),weights=[1/L/10**F]*count,color="tab:green",alpha=0.8)
-            plt.xticks(range(0,46,5),fontsize=24)
-            plt.yticks(fontsize=24)
+            plt.xticks(range(0,46,5),fontsize=16)
+            plt.yticks(fontsize=16)
             plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%1.1f'))
-            plt.xlabel("110-SMA (°)",fontsize=28)
-            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=28)
+            plt.xlabel("110-SMA (°)",fontsize=20)
+            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
                 plt.savefig("img/110-SMA+dis.png",dpi=300)
@@ -404,11 +404,11 @@ def main_window():
             plt.figure(num="SMA-111 distribution",figsize=(6,6))
             count=len(SMA_dis111)
             plt.hist(SMA_dis111,bins=range(3,45),weights=[1/L/10**F]*count,color="tab:blue",alpha=0.8)
-            plt.xticks(range(0,46,5),fontsize=24)
-            plt.yticks(fontsize=24)
+            plt.xticks(range(0,46,5),fontsize=16)
+            plt.yticks(fontsize=16)
             plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%1.1f'))
-            plt.xlabel("111-SMA (°)",fontsize=28)
-            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=28)
+            plt.xlabel("111-SMA (°)",fontsize=20)
+            plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
                 plt.savefig("img/111-SMA+dis.png",dpi=300)
@@ -431,13 +431,13 @@ def main_window():
         if os.path.exists("cache_SMA.pickle"):
             global alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA,L,xlen,ylen
             with open("cache_SMA.pickle", "rb") as file:
-                alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA,L,xlen,ylen=pickle.load(file)
+                alphaSMA100,alphaSMA110,alphaSMA111,xSMA,ySMA,xlen,ylen=pickle.load(file)
         if os.path.exists("cache_BS.pickle"):
             global x,y,BS
             with open("cache_BS.pickle", "rb") as file:
                 x,y,BS=pickle.load(file)
         if os.path.exists("cache_SMA_dis.pickle"):
-            global SMA_dis100,SMA_dis110,SMA_dis111
+            global SMA_dis100,SMA_dis110,SMA_dis111,L
             with open("cache_SMA_dis.pickle", "rb") as file:
                 SMA_dis100,SMA_dis110,SMA_dis111,L=pickle.load(file)  
 

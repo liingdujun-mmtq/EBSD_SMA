@@ -1,0 +1,1 @@
+nuitka --standalone --enable-plugin=tk-inter --remove-output --windows-disable-console .\sma.py
