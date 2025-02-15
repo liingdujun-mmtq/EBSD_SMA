@@ -135,10 +135,10 @@ def plotBSimage(x,y,BS,cmap="Greys"):
     plt.tight_layout()
     #plt.savefig("100-SMA.png",dpi=300)
     
-def plotSMAimage(SMA,xSMA,ySMA,color="tab:red",minang=10):
+def plotSMAimage(SMA,xSMA,ySMA,color="tab:red",minang=10,alpha=1,edgecolors="none"):
         
         SMAplot1,SMAplotx1,SMAploty1=highSMA(SMA,xSMA,ySMA,minang)
-        plt.scatter(SMAplotx1,SMAploty1,c=color,s=4)
+        plt.scatter(SMAplotx1,SMAploty1,c=color,s=4,alpha=alpha,edgecolors=edgecolors)
         plt.xlim(0,np.max(x))
         plt.ylim(np.max(y),0)
         plt.xticks([])
@@ -257,6 +257,16 @@ def main_window():
     config_notshow_img=tk.BooleanVar()
     tk.Checkbutton(plot_frame,text="Skip show image",variable=config_notshow_img).grid(row=2,column=2)
 
+    ### custom GUI
+    custom_frame=tk.Frame(root)
+    custom_frame.pack(anchor='w')
+    tk.Label(custom_frame,text="Custom:",width=16).grid(row=1,column=0)
+
+    tk.Label(custom_frame,text="Custom F:",width=16).grid(row=2,column=0)
+    custom_F=tk.Entry(custom_frame,textvariable=tk.IntVar(value=5))
+    custom_F.grid(row=2,column=1)
+
+
     ### function GUI
     function_frame=tk.Frame(root)
     function_frame.pack(anchor='w')
@@ -347,6 +357,14 @@ def main_window():
             plotscalemarker(x,y,color="black")
             if save_img:
                 plt.savefig("img/111-SMA.png",dpi=300)
+            plt.figure(num="All SMA Image",figsize=(6,6))
+            plotSMAimage(alphaSMA100,xSMA,ySMA,color="tab:red",minang=10,alpha=0.3,edgecolors="none")
+            plotSMAimage(alphaSMA110,xSMA,ySMA,color="tab:green",minang=10,alpha=0.3,edgecolors="none")
+            plotSMAimage(alphaSMA111,xSMA,ySMA,color="tab:blue",minang=10,alpha=0.3,edgecolors="none")
+            plotscalemarker(x,y,color="black")
+            if save_img:
+                plt.savefig("img/ALL-SMA.png",dpi=300)
+
 
         SMABC_img=config_SMABC_img.get()
         if SMABC_img:
@@ -374,7 +392,8 @@ def main_window():
         if SMA_dis_img:
             plt.figure(num="SMA-100 distribution",figsize=(6,6))
             count=len(SMA_dis100)
-            F=5
+            #F=5
+            F=int(custom_F.get())
             plt.hist(SMA_dis100,bins=range(3,45),weights=[1/L/10**F]*count,color="tab:red",alpha=0.8)
             plt.xticks(range(0,46,5),fontsize=16)
             plt.yticks(fontsize=16)
