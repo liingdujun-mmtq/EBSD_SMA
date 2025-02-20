@@ -256,6 +256,9 @@ def main_window():
     config_notshow_img=tk.BooleanVar()
     tk.Checkbutton(plot_frame,text="Skip show image",variable=config_notshow_img).grid(row=2,column=2)
 
+    config_output_data=tk.BooleanVar()
+    tk.Checkbutton(plot_frame,text="Output Data",variable=config_output_data).grid(row=2,column=3)
+
     ### custom GUI
     custom_frame=tk.Frame(root)
     custom_frame.pack(anchor='w')
@@ -332,12 +335,18 @@ def main_window():
         BS_img=config_BS_img.get()
         save_img=config_save_img.get()
         notshow_img=config_notshow_img.get()
+        outputdata=config_output_data.get()
         if BS_img:
             plt.figure(num="BS Image",figsize=(6,6))
             plotBSimage(x,y,BS,cmap="Greys")
             plotscalemarker(x,y,color="tab:red")
             if save_img:
                 plt.savefig("img/BS.png",dpi=300)
+            if outputdata:
+                with open('img/BS_img.txt', 'w') as f:
+                    f.write("%s\t%s\t%s\n" %("x","y","BS"))
+                    for i in range(len(x)):
+                        f.write("%7.2f\t%7.2f\t%7.2f\n" %(x[i],y[i],BS[i]))
         
         SMA_img=config_SMA_img.get()
         if SMA_img:
@@ -365,6 +374,11 @@ def main_window():
             plotscalemarker(x,y,color="black")
             if save_img:
                 plt.savefig("img/ALL-SMA.png",dpi=300)
+            if outputdata:
+                with open('img/SMA.txt', 'w') as f:
+                    f.write("%s\t%s\t%s\t%s\t%s\n" %("x","y","SMA100","SMA110","SMA111"))
+                    for i in range(len(x)):
+                        f.write("%7.2f\t%7.2f\t%7.2f\t%7.2f\t%7.2f\n" %(x[i],y[i],alphaSMA100[i],alphaSMA110[i],alphaSMA111[i]))
 
         SMABC_img=config_SMABC_img.get()
         if SMABC_img:
@@ -389,6 +403,8 @@ def main_window():
             if save_img:
                 plt.savefig("img/111-SMA+BS.png",dpi=300)
         SMA_dis_img=config_SMA_dis_img.get()
+
+
         if SMA_dis_img:
             plt.figure(num="SMA-100 distribution",figsize=(6,6))
             count=len(SMA_dis100)
@@ -405,6 +421,7 @@ def main_window():
                 plt.savefig("img/100-SMA+dis.png",dpi=300)
             MessageBox.insert(END, "100-SMA Mean: %4.2f ± %4.2f \n" % (np.mean(SMA_dis100),np.std(SMA_dis100)) )
             MessageBox.insert(END, "Total 100-SMA density = %4.2e \n" %(len(SMA_dis100)/L))
+            
             
             
             plt.figure(num="SMA-110 distribution",figsize=(6,6))
@@ -432,6 +449,21 @@ def main_window():
             plt.tight_layout()
             if save_img:
                 plt.savefig("img/111-SMA+dis.png",dpi=300)
+            
+            if outputdata:
+                with open('img/SMA100_distribution.txt', 'w') as f:
+                    f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
+                    for i in alphaSMA100:
+                        f.write("%7.2f\n" %(i))
+                with open('img/SMA110_distribution.txt', 'w') as f:
+                    f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
+                    for i in alphaSMA110:
+                        f.write("%7.2f\n" %(i))
+                with open('img/SMA111_distribution.txt', 'w') as f:
+                    f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
+                    for i in alphaSMA111:
+                        f.write("%7.2f\n" %(i))
+
             MessageBox.insert(END, "111-SMA Mean: %4.2f ± %4.2f \n" % (np.mean(SMA_dis111),np.std(SMA_dis111)) )
             MessageBox.insert(END, "Total 111-SMA density = %4.2e \n" %(len(SMA_dis111)/L))
 
