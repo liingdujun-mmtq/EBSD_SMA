@@ -336,14 +336,29 @@ def main_window():
         save_img=config_save_img.get()
         notshow_img=config_notshow_img.get()
         outputdata=config_output_data.get()
+
+        if os.path.exists("img"):
+            pass
+        else:
+            #os.chdir("img")
+            os.mkdir("img")
+        imagenum=0
+        path="img/"+str(imagenum)
+
+        while(os.path.exists(path)):
+            imagenum=imagenum+1
+            path="img/"+str(imagenum)
+        os.mkdir(path)
+
+
         if BS_img:
             plt.figure(num="BS Image",figsize=(6,6))
             plotBSimage(x,y,BS,cmap="Greys")
             plotscalemarker(x,y,color="tab:red")
             if save_img:
-                plt.savefig("img/BS.png",dpi=300)
+                plt.savefig(path+"/BS.png",dpi=300)
             if outputdata:
-                with open('img/BS_img.txt', 'w') as f:
+                with open(path+'/BS_img.txt', 'w') as f:
                     f.write("%s\t%s\t%s\n" %("x","y","BS"))
                     for i in range(len(x)):
                         f.write("%7.2f\t%7.2f\t%7.2f\n" %(x[i],y[i],BS[i]))
@@ -354,28 +369,28 @@ def main_window():
             plotSMAimage(alphaSMA100,xSMA,ySMA,color="tab:red",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/100-SMA.png",dpi=300)
+                plt.savefig(path+"/100-SMA.png",dpi=300)
 
             plt.figure(num="110-SMA Image",figsize=(6,6))
             plotSMAimage(alphaSMA110,xSMA,ySMA,color="tab:green",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/110-SMA.png",dpi=300)
+                plt.savefig(path+"/110-SMA.png",dpi=300)
 
             plt.figure(num="111-SMA Image",figsize=(6,6))
             plotSMAimage(alphaSMA111,xSMA,ySMA,color="tab:blue",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/111-SMA.png",dpi=300)
+                plt.savefig(path+"/111-SMA.png",dpi=300)
             plt.figure(num="All SMA Image",figsize=(6,6))
             plotSMAimage(alphaSMA100,xSMA,ySMA,color="tab:red",minang=10,alpha=0.3,edgecolors="none")
             plotSMAimage(alphaSMA110,xSMA,ySMA,color="tab:green",minang=10,alpha=0.3,edgecolors="none")
             plotSMAimage(alphaSMA111,xSMA,ySMA,color="tab:blue",minang=10,alpha=0.3,edgecolors="none")
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/ALL-SMA.png",dpi=300)
+                plt.savefig(path+"/ALL-SMA.png",dpi=300)
             if outputdata:
-                with open('img/SMA.txt', 'w') as f:
+                with open(path+'/SMA.txt', 'w') as f:
                     f.write("%s\t%s\t%s\t%s\t%s\n" %("x","y","SMA100","SMA110","SMA111"))
                     for i in range(len(x)):
                         f.write("%7.2f\t%7.2f\t%7.2f\t%7.2f\t%7.2f\n" %(x[i],y[i],alphaSMA100[i],alphaSMA110[i],alphaSMA111[i]))
@@ -387,24 +402,26 @@ def main_window():
             plotSMAimage(alphaSMA100,xSMA,ySMA,color="tab:red",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/100-SMA+BS.png",dpi=300)
+                plt.savefig(path+"/100-SMA+BS.png",dpi=300)
 
             plt.figure(num="110-SMA+BS Image",figsize=(6,6))
             plotBSimage(x,y,BS,cmap="Greys")
             plotSMAimage(alphaSMA110,xSMA,ySMA,color="tab:green",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/110-SMA+BS.png",dpi=300)
+                plt.savefig(path+"/110-SMA+BS.png",dpi=300)
 
             plt.figure(num="111-SMA+BS Image",figsize=(6,6))
             plotBSimage(x,y,BS,cmap="Greys")
             plotSMAimage(alphaSMA111,xSMA,ySMA,color="tab:blue",minang=10)
             plotscalemarker(x,y,color="black")
             if save_img:
-                plt.savefig("img/111-SMA+BS.png",dpi=300)
+                plt.savefig(path+"/111-SMA+BS.png",dpi=300)
+
+
+
+
         SMA_dis_img=config_SMA_dis_img.get()
-
-
         if SMA_dis_img:
             plt.figure(num="SMA-100 distribution",figsize=(6,6))
             count=len(SMA_dis100)
@@ -418,7 +435,7 @@ def main_window():
             plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
-                plt.savefig("img/100-SMA+dis.png",dpi=300)
+                plt.savefig(path+"/100-SMA+dis.png",dpi=300)
             MessageBox.insert(END, "100-SMA Mean: %4.2f ± %4.2f \n" % (np.mean(SMA_dis100),np.std(SMA_dis100)) )
             MessageBox.insert(END, "Total 100-SMA density = %4.2e \n" %(len(SMA_dis100)/L))
             
@@ -434,7 +451,7 @@ def main_window():
             plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
-                plt.savefig("img/110-SMA+dis.png",dpi=300)
+                plt.savefig(path+"/110-SMA+dis.png",dpi=300)
             MessageBox.insert(END, "110-SMA Mean: %4.2f ± %4.2f \n" % (np.mean(SMA_dis110),np.std(SMA_dis110)) )
             MessageBox.insert(END, "Total 110-SMA density = %4.2e \n" %(len(SMA_dis110)/L))
 
@@ -448,18 +465,18 @@ def main_window():
             plt.ylabel("SMA Density ($×10^{%d}$ m$^{-1}$)" %F,fontsize=20)
             plt.tight_layout()
             if save_img:
-                plt.savefig("img/111-SMA+dis.png",dpi=300)
+                plt.savefig(path+"/111-SMA+dis.png",dpi=300)
             
             if outputdata:
-                with open('img/SMA100_distribution.txt', 'w') as f:
+                with open(path+'/SMA100_distribution.txt', 'w') as f:
                     f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
                     for i in alphaSMA100:
                         f.write("%7.2f\n" %(i))
-                with open('img/SMA110_distribution.txt', 'w') as f:
+                with open(path+'/SMA110_distribution.txt', 'w') as f:
                     f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
                     for i in alphaSMA110:
                         f.write("%7.2f\n" %(i))
-                with open('img/SMA111_distribution.txt', 'w') as f:
+                with open(path+'/SMA111_distribution.txt', 'w') as f:
                     f.write("Scan Length= %f m \n Note: SMA density=1/L/pixel \n" %L)
                     for i in alphaSMA111:
                         f.write("%7.2f\n" %(i))
